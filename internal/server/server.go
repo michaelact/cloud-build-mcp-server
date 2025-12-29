@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log/slog"
 
@@ -11,6 +12,16 @@ import (
 
 // StartServer initializes and starts the MCP server.
 func StartServer() {
+	var transport string
+	flag.StringVar(&transport, "t", "stdio", "Transport type (stdio or http)")
+	flag.StringVar(
+		&transport,
+		"transport",
+		"stdio",
+		"Transport type (stdio or http)",
+	)
+	flag.Parse()
+
 	s := server.NewMCPServer(
 		"Cloud Build MCP Server",
 		"1.0.0",
@@ -21,7 +32,21 @@ func StartServer() {
 	ctx := context.Background()
 	tools.Add(ctx, s)
 
-	if err := server.ServeStdio(s); err != nil {
-		fmt.Printf("Server error: %v\n", err)
+	switch transport {
+		case "stdio":
+			if err := server.ServeStdio(s); err != nil {
+				fmt.Printf("Server error: %v\n", err)
+			}
+
+		case "http":
+			if err := server.ServeHTTP(s); err != nil {
+				fmt.Printf("Server error: %v\n", err)
+			}
+
+		default:
+			log.Fatalf(
+				"Invalid transport type: %s. Must be 'stdio' or 'http'",
+				transport,
+			)
 	}
 }
