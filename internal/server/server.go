@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log"
 	"log/slog"
 
 	"github.com/jerop/cloud-build-mcp-server/internal/tools"
@@ -39,7 +40,8 @@ func StartServer() {
 			}
 
 		case "http":
-			if err := server.ServeHTTP(s); err != nil {
+			sseServer := server.NewSSEServer(s)
+			if err := sseServer.Start(":8080"); err != nil {
 				fmt.Printf("Server error: %v\n", err)
 			}
 

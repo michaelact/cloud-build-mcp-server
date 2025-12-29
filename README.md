@@ -4,7 +4,7 @@ A Model Context Protocol (MCP) server for interacting with Google Cloud Build.
 
 ## Tools
 
-| Feature                                   | Tool                | Parameters                                 |
+| Feature                                    | Tool                     | Parameters                                  |
 |--------------------------------------------|--------------------------|---------------------------------------------|
 | List Cloud Build jobs for a project        | `list_cloud_build_jobs`  | `project_id`                                |
 | View details of a specific Cloud Build job | `get_cloud_build_job`    | `project_id`, `build_id`                    |

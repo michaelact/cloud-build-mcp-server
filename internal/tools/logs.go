@@ -47,10 +47,7 @@ func getCloudBuildLogsHandler(ctx context.Context, request mcp.CallToolRequest) 
 	}
 
 	// Get tail_lines parameter, default to 100
-	tailLines := defaultTailLines
-	if tl, err := request.RequireNumber("tail_lines"); err == nil {
-		tailLines = int(tl)
-	}
+	tailLines := request.GetInt("tail_lines", defaultTailLines)
 
 	// Create Cloud Build client to get build info
 	buildClient, err := cloudbuild.NewClient(ctx)
