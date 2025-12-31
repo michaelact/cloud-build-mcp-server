@@ -14,13 +14,12 @@ import (
 // StartServer initializes and starts the MCP server.
 func StartServer() {
 	var transport string
+	var address string
+
 	flag.StringVar(&transport, "t", "stdio", "Transport type (stdio or http)")
-	flag.StringVar(
-		&transport,
-		"transport",
-		"stdio",
-		"Transport type (stdio or http)",
-	)
+	flag.StringVar(&transport, "transport", "stdio", "Transport type (stdio or http)")
+	flag.StringVar(&address, "address", "127.0.0.1:8080", "Address to listen on")
+
 	flag.Parse()
 
 	s := server.NewMCPServer(
@@ -41,7 +40,7 @@ func StartServer() {
 
 		case "http":
 			sseServer := server.NewSSEServer(s)
-			if err := sseServer.Start(":8080"); err != nil {
+			if err := sseServer.Start(address); err != nil {
 				fmt.Printf("Server error: %v\n", err)
 			}
 

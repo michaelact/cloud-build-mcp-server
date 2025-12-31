@@ -29,7 +29,7 @@ func getCloudBuildLogs() server.ServerTool {
 				mcp.Description("Cloud Build job ID"),
 			),
 			mcp.WithNumber("tail_lines",
-				mcp.Description("Number of log lines to return from the end (default: 100, use 0 for all logs)"),
+				mcp.Description("Number of log lines to return from the end (default: 100 for cost efficiency, use 0 for all logs)"),
 			),
 		),
 		Handler: getCloudBuildLogsHandler,
