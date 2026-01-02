@@ -28,6 +28,9 @@ func getCloudBuildLogs() server.ServerTool {
 				mcp.Required(),
 				mcp.Description("Cloud Build job ID"),
 			),
+			mcp.WithString("region",
+				mcp.Description("GCP region where the build is located (e.g., 'asia-southeast2'). Leave empty for global/no region."),
+			),
 			mcp.WithNumber("tail_lines",
 				mcp.Description("Number of log lines to return from the end (default: 100 for cost efficiency, use 0 for all logs)"),
 			),
@@ -46,6 +49,9 @@ func getCloudBuildLogsHandler(ctx context.Context, request mcp.CallToolRequest) 
 		return mcp.NewToolResultError("Missing build_id: " + err.Error()), nil
 	}
 
+	// Get optional region parameter
+	region := request.GetString("region", "")
+
 	// Get tail_lines parameter, default to 100
 	tailLines := request.GetInt("tail_lines", defaultTailLines)
 
@@ -56,11 +62,21 @@ func getCloudBuildLogsHandler(ctx context.Context, request mcp.CallToolRequest) 
 	}
 	defer buildClient.Close()
 
-	// Get the build to retrieve log information
-	build, err := buildClient.GetBuild(ctx, &cloudbuildpb.GetBuildRequest{
-		ProjectId: projectID,
-		Id:        buildID,
-	})
+	// Build the request based on whether region is provided
+	var build *cloudbuildpb.Build
+	if region != "" {
+		// Use Name field for regional builds
+		buildName := fmt.Sprintf("projects/%s/locations/%s/builds/%s", projectID, region, buildID)
+		build, err = buildClient.GetBuild(ctx, &cloudbuildpb.GetBuildRequest{
+			Name: buildName,
+		})
+	} else {
+		// Use ProjectId and Id for global builds
+		build, err = buildClient.GetBuild(ctx, &cloudbuildpb.GetBuildRequest{
+			ProjectId: projectID,
+			Id:        buildID,
+		})
+	}
 	if err != nil {
 		return mcp.NewToolResultError("Error getting build: " + err.Error()), nil
 	}
