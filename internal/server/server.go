@@ -39,16 +39,23 @@ func StartServer() {
 				fmt.Printf("Server error: %v\n", err)
 			}
 
-		case "http":
-			slog.Info("Starting server with HTTP transport", "address", address, "path", "/sse")
+		case "sse":
+			slog.Info("Starting server with SSE transport", "address", address, "path", "/sse")
 			sseServer := server.NewSSEServer(s)
 			if err := sseServer.Start(address); err != nil {
 				fmt.Printf("Server error: %v\n", err)
 			}
 
+		case "streamable-http":
+			slog.Info("Starting server with Streamable HTTP transport", "address", address, "path", "/mcp")
+			httpServer := server.NewStreamableHTTPServer(s)
+			if err := httpServer.Start(address); err != nil {
+				fmt.Printf("Server error: %v\n", err)
+			}
+
 		default:
 			log.Fatalf(
-				"Invalid transport type: %s. Must be 'stdio' or 'http'",
+				"Invalid transport type: %s. Must be 'stdio', 'sse', or 'streamable-http'",
 				transport,
 			)
 	}
