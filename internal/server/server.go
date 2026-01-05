@@ -34,11 +34,13 @@ func StartServer() {
 
 	switch transport {
 		case "stdio":
+			slog.Info("Starting server with stdio transport")
 			if err := server.ServeStdio(s); err != nil {
 				fmt.Printf("Server error: %v\n", err)
 			}
 
 		case "http":
+			slog.Info("Starting server with HTTP transport", "address", address)
 			sseServer := server.NewSSEServer(s)
 			if err := sseServer.Start(address); err != nil {
 				fmt.Printf("Server error: %v\n", err)

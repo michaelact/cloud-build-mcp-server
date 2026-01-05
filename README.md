@@ -4,12 +4,13 @@ A Model Context Protocol (MCP) server for interacting with Google Cloud Build.
 
 ## Tools
 
-| Feature                                    | Tool                     | Parameters                                  |
-|--------------------------------------------|--------------------------|---------------------------------------------|
-| List Cloud Build jobs for a project        | `list_cloud_build_jobs`  | `project_id`                                |
-| View details of a specific Cloud Build job | `get_cloud_build_job`    | `project_id`, `build_id`                    |
-| Create new Cloud Build jobs                | `create_cloud_build_job` | `project_id`, `build_config_json`           |
-| Retry failed or cancelled Cloud Build jobs | `retry_cloud_build_job`  | `project_id`, `build_id`                    |
+| Feature                                    | Tool                     | Parameters                                            |
+|--------------------------------------------|--------------------------|-------------------------------------------------------|
+| List Cloud Build jobs for a project        | `list_cloud_build_jobs`  | `project_id`                                          |
+| View details of a specific Cloud Build job | `get_cloud_build_job`    | `project_id`, `build_id`                              |
+| Create new Cloud Build jobs                | `create_cloud_build_job` | `project_id`, `build_config_json`                     |
+| Retry failed or cancelled Cloud Build jobs | `retry_cloud_build_job`  | `project_id`, `build_id`                              |
+| View logs of a Cloud Build job             | `get_cloud_build_logs`   | `project_id`, `build_id`, `tail_lines`, `region`      |
 
 ## Prerequisites
 
