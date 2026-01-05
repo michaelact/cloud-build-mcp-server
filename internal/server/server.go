@@ -40,7 +40,7 @@ func StartServer() {
 			}
 
 		case "http":
-			slog.Info("Starting server with HTTP transport", "address", address)
+			slog.Info("Starting server with HTTP transport", "address", address, "path", "/sse")
 			sseServer := server.NewSSEServer(s)
 			if err := sseServer.Start(address); err != nil {
 				fmt.Printf("Server error: %v\n", err)
